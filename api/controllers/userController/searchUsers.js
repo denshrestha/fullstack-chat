@@ -1,6 +1,6 @@
-const User = require('../resources/user')
-const setError = require("../responces/setError");
-const setResponse = require("../responces/setReponse");
+const User = require('../../resources/user')
+const setError = require("../../responces/setError");
+const setResponse = require("../../responces/setReponse");
 
 module.exports = async (req, res, next) => {
   const regExp = new RegExp(".*" + req.params.id + ".*", 'i');
@@ -9,6 +9,6 @@ module.exports = async (req, res, next) => {
   if( req.users.length ) {
     setResponse(res, req.users)
   } else {
-    setError(res, {status: 404, message: 'No matches found'})
+    setError(res, {status: 203, message: 'No matches found'})
   }
 }

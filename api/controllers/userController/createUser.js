@@ -1,5 +1,5 @@
-const setError = require('../responces/setError')
-const User = require('../resources/user')
+const setError = require('../../responces/setError')
+const User = require('../../resources/user')
 
 module.exports = async (req, res, next) => {
   const {

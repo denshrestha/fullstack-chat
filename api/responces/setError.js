@@ -1,8 +1,3 @@
-module.exports = (status, err) => {
-  return {
-    status: status,
-    data: {
-      message: err
-    }
-  }
+module.exports = (res, {status, message}) => {
+  return res.status(status).send({data: {message: message}})
 }

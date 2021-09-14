@@ -1,12 +1,11 @@
-const setError = require('../responces/setError')
-const User = require('../resources/user')
+const setError = require('../../responces/setError')
+const User = require('../../resources/user')
 
 module.exports = async (req, res, next) => {
-  const {email} = req.body;
-  const user = await User.findOne({email: email})
+  const {id} = req.body;
+  const user = await User.findOne({_id: id})
   if(user){
-      await User.updateOne({email: email}, {online: false})
-      req.isLoggedOut = true
+      await User.updateOne({_id: id}, {online: false})
       next()
   } else {
     setError(res, {status: 403, message: 'Error! Wrong data provided!'})

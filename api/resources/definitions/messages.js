@@ -1,16 +1,31 @@
 const mongoose = require('mongoose')
+const {Timestamp} = require("mongodb");
 
 module.exports = new mongoose.Schema({
-  author: {
+  _id: {type: mongoose.Types.ObjectId, auto: true},
+  text: {
     type: String,
-    require: true,
+    required: true
   },
-  message: {
+  ChatID: {
     type: String,
-    default: ''
+    required: true
   },
-  timestamp: {
+  userID: {
+    type: String,
+    required: true
+  },
+  createdAt: {
     type: Number,
-    default: null
+    required: true
+  },
+  updatedAt: {
+    type: Number,
+    required: true
+  },
+  isRead: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 })
