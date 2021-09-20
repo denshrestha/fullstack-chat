@@ -23,12 +23,14 @@
         <Nuxt />
       </v-container>
     </v-main>
+    <notification-banner />
   </v-app>
 </template>
 
 <script>
 export default {
   name: "default",
+  middleware: ['isAuthenticated'],
   data: () => ({
     interval: '',
     date: '',
@@ -37,7 +39,8 @@ export default {
   components: {
     sideBar: () => import('@/components/common/side-bar'),
     searchBar: () => import('@/components/common/search-bar'),
-    notificationBar: () => import('@/components/common/notification-bar')
+    notificationBar: () => import('@/components/common/notification-bar'),
+    notificationBanner: () => import('@/components/common/notification-banner')
   },
   created(){
     this.interval = setInterval(()=>{

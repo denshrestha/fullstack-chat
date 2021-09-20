@@ -5,5 +5,6 @@
 export default {
   name: 'index',
   layout: 'default',
+  // middleware: 'isAuthenticated'
 }
 </script>

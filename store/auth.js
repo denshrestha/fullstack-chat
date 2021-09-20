@@ -65,6 +65,7 @@ export const actions = {
       .then((resp)=>{
         if(resp.data){
           const {data} = resp.data
+          commit('setLoginStatus', false)
           return !!data;
         }
       })

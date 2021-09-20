@@ -1,3 +1,3 @@
 module.exports = (res, {status, message}) => {
-  return res.status(status).send({data: {message: message}})
+  return res.status(status).json({data: {message: message}})
 }

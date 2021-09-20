@@ -5,7 +5,7 @@
     </v-avatar>
     <div class="d-inline-flex flex-column justify-start">
       <span class="my-0 mx-2">{{message.text}}</span>
-      <span class="my-0 mx-2">{{getDateAndTime(message)}}</span>
+      <span class="my-0 mx-2 text-caption">{{getDateAndTime(message)}}</span>
     </div>
   </div>
 </template>
@@ -36,7 +36,6 @@ export default {
       return this.avatar
     },
     getDateAndTime(message){
-      console.log(message)
       const date =  new Date(message.createdAt)
       const day = date.getDate()
       const month = date.getMonth()

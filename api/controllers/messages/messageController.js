@@ -41,6 +41,7 @@ module.exports = {
       const newChat = await createUsersChat(req.verifyedUser, req.params.id)
       userChat.push(newChat._id)
       await updateUsersChat(req.verifyedUser, req.params.id, userChat)
+      console.log(1)
       setResponse(res, newChat)
     } else {
       let conversationList = []
@@ -53,6 +54,13 @@ module.exports = {
       const neededChat = conversationList.filter((chat) => {
         return chat.peers.includes(req.verifyedUser) && chat.peers.includes(req.params.id)
       })
+      if(!neededChat.length) {
+        const newChat = await createUsersChat(req.verifyedUser, req.params.id)
+        userChat.push(newChat._id)
+        await updateUsersChat(req.verifyedUser, req.params.id, userChat)
+        setResponse(res,newChat)
+      }
+      console.log(2)
       setResponse(res, neededChat[0])
     }
   }

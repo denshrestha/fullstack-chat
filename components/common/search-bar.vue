@@ -80,7 +80,11 @@ export default {
         'user/addToFriendsRequest',
         {id: id}
       )
-      console.log(result)
+      if(result){
+        console.log(result)
+        this.$notifier.showMessage({ message: result.message, color: result.color })
+        this.$socket.emit('notifyFriendRequest', id)
+      }
     },
     isYou(item) {
       const {id} = this.$store.getters['user/getUser']

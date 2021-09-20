@@ -55,7 +55,16 @@ export const actions = {
   async addToFriendsRequest ({commit}, id) {
     return await this.$axios.post('/api/user/request/friends', id)
       .then((resp) => {
-        return !!resp.data;
+        if(resp.data) {
+          const {data} = resp.data
+          if(data.message){
+            console.log('request Sent')
+            return data
+          }
+          console.log('request exists')
+          return data
+        }
+        return false
       })
       .catch((err) => {
         console.log(err)

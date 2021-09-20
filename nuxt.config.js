@@ -1,6 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - nuxt-proj',
@@ -18,7 +19,6 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-
   serverMiddleware: {
     '/api': '~/api'
   },
@@ -31,6 +31,7 @@ export default {
   plugins: [
     {src: '@/plugins/socket.js', ssr: false},
     '@/plugins/axios.js',
+    '@/plugins/notifier.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

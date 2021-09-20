@@ -28,7 +28,6 @@ export const mutations = {
 
 export const actions = {
   SOCKET_message({commit}, data){
-    console.log('message data:: ', data)
     const {id = '', message = [], peers = []} = data
     commit('setMessages', message)
     commit('setChatId', id)
@@ -48,7 +47,6 @@ export const actions = {
           commit('setPeers', peers)
           return true
         }
-        console.log(resp)
         return false
       })
       .catch((err) => {
