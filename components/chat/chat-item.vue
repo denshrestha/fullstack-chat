@@ -1,7 +1,7 @@
 <template>
   <div class="chat-item d-flex justify-space-between align-center" :class="user.id === message.userID ? 'primary' : 'secondary'">
     <v-avatar>
-      <v-img :src="getUserAvatar(message.userID)"></v-img>
+      <v-img :src="`../${getUserAvatar(message.userID)}`"></v-img>
     </v-avatar>
     <div class="d-inline-flex flex-column justify-start">
       <span class="my-0 mx-2">{{message.text}}</span>

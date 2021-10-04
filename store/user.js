@@ -80,7 +80,7 @@ export const actions = {
           const {requests = [] } = data
           commit('setUser', data)
           commit('setUserRequests', requests)
-          return true
+          return data
         }
         return false
       })
@@ -94,8 +94,10 @@ export const actions = {
     return await this.$axios.post(`api/user/request/friends/${endpoint}`, idData)
       .then((resp) => {
         if (resp.data) {
-          console.log(resp.data)
-          return true
+          const {data} = resp.data
+          if(data.message === "User successfully added to your friends!") {
+            return data.userID
+          }
         }
         return false
       })
@@ -105,7 +107,7 @@ export const actions = {
       })
   },
 
-  async getFriendsDate({commit}, id){
+  async getFriendsData({commit}, id){
     return this.$axios.get(`/api/user/${id}/friends`)
       .then((resp) => {
         if(resp.data) {
@@ -115,6 +117,21 @@ export const actions = {
           }
           return false
         }
+      })
+      .catch((err) => {
+        console.log(err)
+        commit('setError', err.response.data.message)
+      })
+  },
+
+  openUserProfile({commit}, id) {
+    return this.$axios.get(`/api/user/${id}`)
+      .then((resp) => {
+        if(resp.data) {
+          const {data} = resp.data
+          return data.user
+        }
+        return false
       })
       .catch((err) => {
         console.log(err)

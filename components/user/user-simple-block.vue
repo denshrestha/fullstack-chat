@@ -1,7 +1,7 @@
 <template>
   <div v-if="user" class="d-flex justify-space-between align-center text-capitalize">
     <v-avatar size="45">
-      <v-img :src="user.avatar"></v-img>
+      <v-img :src="`../${user.avatar}`"></v-img>
     </v-avatar>
     {{user.fullName}}
     <span class="accent--text text-caption">

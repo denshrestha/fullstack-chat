@@ -35,7 +35,7 @@ export const actions = {
           localStorage.setItem('tokenEndTime', tokenExpTime.toString())
           commit('setUser', data)
           commit('setLoginStatus', true)
-          return true
+          return data
         }
 
         return false

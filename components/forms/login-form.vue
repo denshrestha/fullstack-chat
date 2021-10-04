@@ -58,7 +58,7 @@ export default {
       })
       .then((resp) => {
         if(resp){
-          this.$router.push('/profile')
+          this.$router.push(`/profile/${resp.id}`)
         }
       })
     },

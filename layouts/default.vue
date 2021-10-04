@@ -19,7 +19,7 @@
     </v-app-bar>
     <side-bar />
     <v-main app>
-      <v-container class="fill-height">
+      <v-container class="fill-height" v-if="isDataFetched">
         <Nuxt />
       </v-container>
     </v-main>
@@ -32,9 +32,7 @@ export default {
   name: "default",
   middleware: ['isAuthenticated'],
   data: () => ({
-    interval: '',
-    date: '',
-    time: ''
+    isDataFetched: false
   }),
   components: {
     sideBar: () => import('@/components/common/side-bar'),
@@ -42,15 +40,12 @@ export default {
     notificationBar: () => import('@/components/common/notification-bar'),
     notificationBanner: () => import('@/components/common/notification-banner')
   },
-  created(){
-    this.interval = setInterval(()=>{
-      this.date = new Date().toLocaleDateString()
-      let dateNow = new Date()
-      let hours = dateNow.getHours()
-      let minutes = dateNow.getMinutes()
-      let seconds = dateNow.getSeconds()
-      this.time = `${hours < 10? '0'+hours : hours}.${minutes < 10 ? '0'+minutes : minutes}.${seconds < 10 ? '0'+ seconds : seconds}`
-    }, 1000)
+  async created(){
+    this.isDataFetched = !!await this.$store.dispatch('user/fetchUser')
+    if(this.isDataFetched) {
+      const {id} = this.$store.getters['user/getUser']
+      this.$socket.emit('user entered App', id)
+    }
   },
   mounted() {
     const token = localStorage.getItem('token') || ''

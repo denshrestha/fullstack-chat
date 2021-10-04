@@ -11,6 +11,7 @@ routerUsers.get('/user', verifyToken, userController.getUserInfo, (req, res, nex
 })
 
 routerUsers.get('/user/:id/friends', verifyToken, userController.getFriends, (req, res, next) => {})
+routerUsers.get('/user/:id', verifyToken, userController.openUserProfile, (req, res, next) => {})
 
 routerUsers.post('/user/request/friends', verifyToken, userController.sendFriendshipRequest, (req, res, next) => {})
 

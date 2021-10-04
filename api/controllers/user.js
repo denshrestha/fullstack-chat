@@ -1,6 +1,26 @@
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
 const setError = require('../responces/setError')
 const setResponse = require("../responces/setReponse")
 const User = require('../resources/user')
+const Chat = require("../resources/chat");
+
+const createUsersChat = async (userID, friendID) => {
+  return  await Chat.create({
+    peers: [userID,friendID]
+  })
+}
+
+const updateUsersChat = async (userID, friendID, chatID) => {
+  const currUser = await User.findOne({_id: userID})
+  const friend =  await User.findOne({_id: friendID})
+  let userChat = [...currUser.conversations]
+  let friendChat = [...friend.conversations]
+  userChat.push(chatID)
+  friendChat.push(chatID)
+  await User.updateOne({_id: userID}, {conversations: userChat})
+  await User.updateOne({_id: friendID}, {conversations: friendChat})
+}
 
 const updateFriendList = async (user, newFriend) => {
   const friends = [...user.friends]
@@ -55,13 +75,15 @@ module.exports = {
     if(index > -1) {
       try {
         await updateFriendList(currUser, user.id)
-        await deleteCurrentRequest(currUser, index)
         await updateFriendList(user, currUser.id)
+        await deleteCurrentRequest(currUser, index)
+        const newChat = await createUsersChat(currUser.id, user.id)
+        await updateUsersChat(currUser, user.id, newChat.id)
       } catch (e) {
         console.log('ERROR', e)
         setError(res, {status: 203, message: 'Some error is appeared. Look into the code'})
       }
-      setResponse(res, {message: 'User successfully added to your friends!'})
+      setResponse(res, {message: 'User successfully added to your friends!', userID: user.id})
     } else {
       setError(res, {status: 203, message: 'Some error is appeared. Look into the code'})
     }
@@ -69,13 +91,11 @@ module.exports = {
   declineFriendship: async (req, res, next) => {
     const {CurrentUserId, requestId} = req.body
     const currUser = await User.findOne({_id: CurrentUserId})
-    const user = await User.findOne({_id: requestId})
-    const index = currUser.requests.findIndex((i) => i === requestId)
+    const index = currUser.requests.findIndex((i) => i.id === requestId)
     if(index > -1) {
       try {
         await deleteCurrentRequest(currUser, index)
       } catch (e) {
-        console.log('ERROR', e)
         setError(res, {status: 203, message: 'Some error is appeared. Look into the code'})
       }
       setResponse(res, {message: 'Request declined'})
@@ -87,7 +107,7 @@ module.exports = {
   getFriends: async (req, res, next) => {
     const id = req.params.id
     const user = await User.findOne({_id: id})
-    const friendsData = [...user.friends]
+    const friendsData = [...user.friends] || []
     let friendsList = []
     for (const friendId of friendsData) {
       const friend = await User.findOne({_id: friendId})
@@ -160,7 +180,6 @@ module.exports = {
       }
     } else {
       setResponse(res, {color: 'error', message: 'User not found. Or something went wrong. Please try one more time.'})
-
     }
   },
   updateOnlineStatus: async (req, res, next) => {
@@ -171,6 +190,15 @@ module.exports = {
       next()
     } else {
       setError(res, {status: 403, message: 'Error! Wrong data provided!'})
+    }
+  },
+  openUserProfile: async (req, res, next) => {
+    const {id} = req.params
+    const user = await User.findOne({_id: id})
+    if (user) {
+      setResponse(res, {user: user})
+    } else {
+      setError(res, {status: 403, message: 'Error! No user found'})
     }
   }
 }

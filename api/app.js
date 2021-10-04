@@ -1,7 +1,7 @@
 const express = require('express')
 const routerUsers = require("./routes/users");
 const routerAuth = require("./routes/auth");
-const routerMessages = require("./routes/messages")
+const routerMessages = require("./routes/chat")
 const app = express()
 const server = require('http').createServer(app);
 

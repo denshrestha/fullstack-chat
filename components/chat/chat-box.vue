@@ -1,19 +1,20 @@
 <template>
-  <div class="chat pa-2">
-    <v-responsive class="fill-height overflow-y-auto" max-height="650px">
-      <v-row class="fill-height">
+    <div class="chat pa-2">
+      <v-row class="fill-height"  v-if="messages.length">
         <v-col
           cols="12"
           v-for="(message, index) in messages"
           :key="index"
           class="d-flex"
-          :class="message.userID === user.id ? 'justify-end' : 'justify-start'"
+          :class="message.owner === user.id ? 'justify-end' : 'justify-start'"
         >
          <chat-item :message="message" :avatar="friendAvatar"/>
         </v-col>
       </v-row>
-    </v-responsive>
-  </div>
+      <v-card v-else>
+        No messages here yet...
+      </v-card>
+    </div>
 </template>
 
 <script>

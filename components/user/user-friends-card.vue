@@ -6,10 +6,11 @@
         <v-list-item
           v-for="friend in friends"
           :key="friend.id"
+          @click="$router.push(`/profile/${friend.id}`)"
         >
           <v-list-item-avatar>
             <v-avatar>
-              <v-img :src="friend.avatar"></v-img>
+              <v-img :src="`../${friend.avatar}`"></v-img>
             </v-avatar>
           </v-list-item-avatar>
           <v-list-item-content>
@@ -49,12 +50,24 @@ export default {
   data: () => ({
     friends: []
   }),
-  mounted() {
-    this.getFriends()
+  computed: {
+    friendsLength(){
+      return this.$store.getters['user/getUser'].friends.length
+    }
+  },
+  watch: {
+    friendsLength(val, newVal) {
+      if(val !== newVal){
+        this.getFriends()
+      }
+    }
+  },
+  async mounted() {
+    await this.getFriends()
   },
   methods: {
     async getFriends() {
-      this.friends = await this.$store.dispatch('user/getFriendsDate', this.id)
+      this.friends = await this.$store.dispatch('user/getFriendsDate', this.$route.params.id)
     }
   }
 }

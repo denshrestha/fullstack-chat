@@ -28,24 +28,37 @@ export const mutations = {
 
 export const actions = {
   SOCKET_message({commit}, data){
-    const {id = '', message = [], peers = []} = data
-    commit('setMessages', message)
-    commit('setChatId', id)
-    commit('setPeers', peers)
+    const {messages = {}} = data
+    commit('setNewMessage', messages)
   },
   SOCKET_enterSuccess({commit}, data){
     console.log(data)
   },
-  async getMessageHistory({commit}, friendId) {
-    return this.$axios.get(`/api/messages/getMessages/${friendId}`)
+  async getMessageHistory({commit}, chatId) {
+    return this.$axios.get(`/api/chat/${chatId}`)
       .then((resp) => {
         if(resp.data){
           const {data} = resp.data
-          const {id = '', message = [], peers = []} = data
-          commit('setMessages', message)
+          const {id = '', messages = [], peers = []} = data
+          commit('setMessages', messages)
           commit('setChatId', id)
           commit('setPeers', peers)
           return true
+        }
+        return false
+      })
+      .catch((err) => {
+        console.log(err)
+        return false
+      })
+  },
+  async getChatID({commit}, dataId) {
+    return this.$axios.get(`/api/chat/${dataId.userID}/${dataId.friendID}`)
+      .then((resp) => {
+        if(resp.data){
+          const {data} = resp.data
+          console.log(data)
+          return data
         }
         return false
       })

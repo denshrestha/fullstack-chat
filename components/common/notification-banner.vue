@@ -26,11 +26,23 @@ export default {
     show: ''
   }),
   created () {
-    this.$store.subscribe((mutation, state) => {
+    this.$store.subscribe(async (mutation, state) => {
       if (mutation.type === 'notifications/setNotification') {
         this.message = state.notifications.message
         this.color = state.notifications.color
         this.show = true
+      }
+      if (mutation.type === 'notifications/SOCKET_newFriendNotification') {
+        this.message = state.notifications.message
+        this.color = state.notifications.color
+        this.show = true
+        await this.$store.dispatch('user/fetchUser')
+      }
+      if (mutation.type === 'notifications/SOCKET_friendshipRequestAccepted') {
+        this.message = 'User accepted your request!'
+        this.color = 'success'
+        this.show = true
+        await this.$store.dispatch('user/fetchUser')
       }
     })
   }

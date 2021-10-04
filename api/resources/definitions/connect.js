@@ -1,9 +1,12 @@
 const mongoose = require('mongoose')
 
 module.exports = new mongoose.Schema({
-  _id: {type: mongoose.Types.ObjectId, auto: true},
-  peers: {
-    type: Array,
+  socketId: {
+    type: String,
     require: true
   },
+  userId: {
+    type: String,
+    required: true,
+  }
 })

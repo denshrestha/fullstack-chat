@@ -20,7 +20,7 @@
           <v-list-item v-for="notification in notifications" :key="notification.id">
             <v-list-item-avatar>
               <v-avatar>
-                <v-img :src="notification.avatar"></v-img>
+                <v-img :src="`../${notification.avatar}`"></v-img>
               </v-avatar>
             </v-list-item-avatar>
             <v-list-item-content>
@@ -30,12 +30,12 @@
               </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon color="primary" @click="handleNotification(notification.id, true)">
+              <v-btn icon color="primary" @click="handleNotification(notification.id, 'accept')">
                 <v-icon>mdi-check</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn icon color="red" @click="handleNotification(notification.id, false)">
+              <v-btn icon color="red" @click="handleNotification(notification.id, 'decline')">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -58,34 +58,22 @@ export default {
     }
   },
   methods: {
-    async handleNotification(notificationID, accepted){
+    async handleNotification(notificationID, endPoint){
       const {id} = this.$store.getters['user/getUser']
-      if(accepted) {
-        const result = await this.$store.dispatch(
-          'user/handleRequest',
-          {
-            endpoint: 'accept',
-            idData:{
-              CurrentUserId: id,
-              requestId: notificationID
-            }
-          })
-        if(result) {
-          await this.$store.dispatch('user/fetchUser')
-        }
-      } else {
-        const result = await this.$store.dispatch(
-          'user/handleRequest',
-          {
-            endpoint: 'decline',
-            idData:{
-              CurrentUserId: id,
-              requestId: notificationID
-            }
-          })
-        if(result) {
-          await this.$store.dispatch('user/fetchUser')
-        }
+      const result = await this.$store.dispatch(
+        'user/handleRequest',
+        {
+          endpoint: endPoint,
+          idData:{
+            CurrentUserId: id,
+            requestId: notificationID
+          }
+        })
+      console.log('result', result)
+      if(result) {
+        this.$socket.emit('notify other user', result)
+        await this.$store.dispatch('user/fetchUser')
+        // this.$socket.emit
       }
     },
   }

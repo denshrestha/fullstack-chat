@@ -16,7 +16,7 @@
     <template v-slot:item="{ item }">
       <v-list-item-avatar>
         <v-avatar>
-          <v-img :src="item.avatar"></v-img>
+          <v-img :src="`../${item.avatar}`"></v-img>
         </v-avatar>
       </v-list-item-avatar>
       <v-list-item-content>
@@ -81,7 +81,6 @@ export default {
         {id: id}
       )
       if(result){
-        console.log(result)
         this.$notifier.showMessage({ message: result.message, color: result.color })
         this.$socket.emit('notifyFriendRequest', id)
       }

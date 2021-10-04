@@ -11,7 +11,7 @@ module.exports = new mongoose.Schema({
     type: String,
     required: true
   },
-  userID: {
+  owner: {
     type: String,
     required: true
   },

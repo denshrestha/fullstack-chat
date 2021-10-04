@@ -3,7 +3,7 @@
     <v-row align="center">
       <v-col cols="12" md="4">
         <v-avatar size="150">
-          <v-img :src="`${user.avatar}` || require(`../../assets/plaseholder.jpeg`)" cover alt="avatar"/>
+          <v-img :src="`../${user.avatar}` || require(`../../assets/plaseholder.jpeg`)" cover alt="avatar"/>
         </v-avatar>
       </v-col>
       <v-col cols="12" md="8">
